@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Getter
 @Configuration
-@PropertySource(value = "classpath:application.yml")
+@PropertySource(value = "classpath:application.properties")
 public class WeatherAPIConfig {
 
     @Value("${weather.key}")
