@@ -3,6 +3,7 @@ package ru.laverno.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.laverno.Const;
+import ru.laverno.config.WeatherAPIConfig;
 import ru.laverno.model.Location;
 import ru.laverno.model.Weather;
 import ru.laverno.model.WeatherNowInfo;
@@ -15,10 +16,16 @@ import java.util.List;
 @Service
 public class WeatherService {
 
+    private final WeatherAPIConfig weatherConfig;
+
+    public WeatherService(WeatherAPIConfig weatherConfig) {
+        this.weatherConfig = weatherConfig;
+    }
+
     public Location setLocation(String city) {
         try {
             RestTemplate restTemplate = new RestTemplate();
-            final var url = new URL("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=78eaf29f0744c2ec91624adad6ae2cbd");
+            final var url = new URL("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + weatherConfig.getKey());
             final var response = restTemplate.getForEntity(url.toURI(), Location[].class);
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
@@ -35,7 +42,7 @@ public class WeatherService {
     public String getWeather(Location location) {
         try {
             RestTemplate restTemplate = new RestTemplate();
-            final var url = new URL("https://api.openweathermap.org/data/2.5/weather?lat=" + location.getLat() + "&lon=" + location.getLon() + "&appid=78eaf29f0744c2ec91624adad6ae2cbd&lang=ru&units=metric");
+            final var url = new URL("https://api.openweathermap.org/data/2.5/weather?lat=" + location.getLat() + "&lon=" + location.getLon() + "&appid=" + weatherConfig.getKey() + "&lang=ru&units=metric");
             final var response = restTemplate.getForEntity(url.toURI(), WeatherNowInfo.class);
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
