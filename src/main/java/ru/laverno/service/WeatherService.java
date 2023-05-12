@@ -4,7 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.laverno.Const;
 import ru.laverno.config.WeatherAPIConfig;
-import ru.laverno.model.Location;
+import ru.laverno.dto.LocationDTO;
+import ru.laverno.entity.Location;
 import ru.laverno.model.Weather;
 import ru.laverno.model.WeatherNowInfo;
 
@@ -22,11 +23,11 @@ public class WeatherService {
         this.weatherConfig = weatherConfig;
     }
 
-    public Location setLocation(String city) {
+    public LocationDTO setLocation(String city) {
         try {
             RestTemplate restTemplate = new RestTemplate();
             final var url = new URL("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + weatherConfig.getKey());
-            final var response = restTemplate.getForEntity(url.toURI(), Location[].class);
+            final var response = restTemplate.getForEntity(url.toURI(), LocationDTO[].class);
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 return response.getBody()[0];
@@ -50,7 +51,7 @@ public class WeatherService {
                 final var weather = body.getWeather();
                 final var temperature = body.getTemperature();
                 final var wind = body.getWind();
-                return String.format(Const.TEMPERATURE_MESSAGE, location.getLocalName().getRuName(), convertWeatherIntoDescription(weather), temperature.getTemp(), temperature.getFeelsLike(), wind.getSpeed());
+                return String.format(Const.TEMPERATURE_MESSAGE, location.getLocalName(), convertWeatherIntoDescription(weather), temperature.getTemp(), temperature.getFeelsLike(), wind.getSpeed());
             }
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -2,7 +2,6 @@ package ru.laverno.service;
 
 import org.springframework.stereotype.Service;
 import ru.laverno.config.WeatherAPIConfig;
-import ru.laverno.model.Location;
 
 @Service
 public class HourlyWeather {
@@ -13,9 +12,7 @@ public class HourlyWeather {
         this.weatherConfig = weatherConfig;
     }
 
-    public String getHourlyWeather(final Location location) {
-
-
+    public String getHourlyWeather() {
         return weatherConfig.getKey();
     }
 }

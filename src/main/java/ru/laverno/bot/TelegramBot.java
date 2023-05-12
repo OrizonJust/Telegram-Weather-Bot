@@ -7,12 +7,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.laverno.Const;
 import ru.laverno.config.BotConfig;
-import ru.laverno.model.Location;
 import ru.laverno.service.HourlyWeather;
+import ru.laverno.service.LocationService;
 import ru.laverno.service.WeatherService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
@@ -20,12 +17,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig config;
     private final WeatherService weatherService;
     private final HourlyWeather hourlyWeather;
-    private final Map<Long, Location> location = new HashMap<>();
+    private final LocationService locationService;
 
-    public TelegramBot(BotConfig config, WeatherService weatherService, HourlyWeather hourlyWeather) {
+    public TelegramBot(BotConfig config, WeatherService weatherService, HourlyWeather hourlyWeather, LocationService locationService) {
         this.config = config;
         this.weatherService = weatherService;
         this.hourlyWeather = hourlyWeather;
+        this.locationService = locationService;
     }
 
     @Override
@@ -46,14 +44,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
             if (messageText.startsWith("/location")) {
                 messageText = messageText.substring(9).trim();
-                location.put(chatId, weatherService.setLocation(messageText));
-                sendMessage(chatId, String.format(Const.LOCATION_MESSAGE, location.get(chatId).getLocalName().getRuName()));
+                final var result = locationService.setLocation(chatId, messageText);
+                sendMessage(chatId, String.format(Const.LOCATION_MESSAGE, result.getName()));
             }
             if (messageText.startsWith("/weather")) {
-                sendMessage(chatId, weatherService.getWeather(location.get(chatId)));
+                sendMessage(chatId, weatherService.getWeather(locationService.getLocationByChatId(chatId)));
             }
             if (messageText.startsWith("/hweather")) {
-                sendMessage(chatId, hourlyWeather.getHourlyWeather(location.get(chatId)));
+                sendMessage(chatId, hourlyWeather.getHourlyWeather());
             }
         }
     }
