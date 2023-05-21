@@ -15,4 +15,6 @@ public class Const {
     public static final String LOCATION_MESSAGE = """
             Геопозиция установлена: %s.
             """;
+
+    public static final String LOCAL_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
 }
