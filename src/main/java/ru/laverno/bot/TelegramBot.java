@@ -7,7 +7,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.laverno.Const;
 import ru.laverno.config.BotConfig;
-import ru.laverno.service.HourlyWeather;
 import ru.laverno.service.LocationService;
 import ru.laverno.service.WeatherService;
 
@@ -16,13 +15,11 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig config;
     private final WeatherService weatherService;
-    private final HourlyWeather hourlyWeather;
     private final LocationService locationService;
 
-    public TelegramBot(BotConfig config, WeatherService weatherService, HourlyWeather hourlyWeather, LocationService locationService) {
+    public TelegramBot(BotConfig config, WeatherService weatherService, LocationService locationService) {
         this.config = config;
         this.weatherService = weatherService;
-        this.hourlyWeather = hourlyWeather;
         this.locationService = locationService;
     }
 
@@ -51,7 +48,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 sendMessage(chatId, weatherService.getWeather(locationService.getLocationByChatId(chatId)));
             }
             if (messageText.startsWith("/hweather")) {
-                sendMessage(chatId, hourlyWeather.getHourlyWeather());
+                sendMessage(chatId, weatherService.getHourlyWeather(locationService.getLocationByChatId(chatId)));
             }
         }
     }
