@@ -7,3 +7,5 @@
 /docker/
 
 *.properties
+
+db.src
