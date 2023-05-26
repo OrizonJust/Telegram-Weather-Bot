@@ -1,10 +1,10 @@
 package ru.laverno;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Const {
+
+    private Const() throws IllegalAccessException {
+        throw new IllegalAccessException("Доступ к конструктору класса Const запрещён!");
+    }
 
     public static final String TEMPERATURE_MESSAGE = """
             %s: %s.

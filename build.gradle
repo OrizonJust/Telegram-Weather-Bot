@@ -20,20 +20,21 @@ tasks.withType(Jar).configureEach {
 }
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.26'
-    annotationProcessor 'org.projectlombok:lombok:1.18.26'
-
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.telegram:telegrambots:5.6.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.0'
-    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0'
+
+    implementation "org.telegram:telegrambots:${ver_telegram}"
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:${ver_jackson}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${ver_jackson}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${ver_jackson}"
 
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc:3.0.6'
     implementation 'org.postgresql:postgresql:42.6.0'
     implementation 'org.flywaydb:flyway-core:9.16.3'
+
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
